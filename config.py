@@ -1,0 +1,13 @@
+data_dir = 'FaceLandMarkDetection/data/face_landmark_dataset'
+data_file = 'FaceLandMarkDetection/data/face_landmark_dataset/labels_ibug_300W_train.xml'
+train_val_split_ratio = 0.1
+num_epochs = 50
+save_model_dir = 'checkpoints/face_landmarks.pth'
+project = 'Face-LandMark-Detection'
+num_classes = 136
+batch_size = 32
+learning_rate = 0.0001
+dataset = "DLIB"
+architecture = "Resnet"
+model_checkpoint_path = 'checkpoints/'
+model_checkpoint = 'checkpoints/model-{epoch:02d}-{val_loss:.2f}'
