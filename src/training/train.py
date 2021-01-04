@@ -1,13 +1,16 @@
-from FaceLandmarkDetection.config import data_file, data_dir, project, save_model_dir, num_epochs, num_classes, \
-    batch_size, learning_rate, dataset, train_val_split_ratio, architecture
-from FaceLandmarkDetection.src.detection.data.dataset import FaceLandmarksDataset
-from FaceLandmarkDetection.src.detection.data.prepare_data import Transforms
-from FaceLandmarkDetection.src.detection.model.network import Network
 import copy
 import torch
 import numpy as np
 import wandb
 import random
+import sys
+
+sys.path.append('.')
+from FaceLandmarkDetection.config import data_file, data_dir, project, save_model_dir, num_epochs, num_classes, \
+    batch_size, learning_rate, dataset, train_val_split_ratio, architecture
+from FaceLandmarkDetection.src.detection.data.dataset import FaceLandmarksDataset
+from FaceLandmarkDetection.src.detection.data.prepare_data import Transforms
+from FaceLandmarkDetection.src.detection.model.network import Network
 
 
 def make(config):
@@ -17,7 +20,7 @@ def make(config):
     val_loader = make_loader(val, batch_size=config.batch_size)
 
     # Make the model
-    model = Network(config.classes).to(device)
+    model = Network(config.num_classes).to(device)
 
     # Make the loss and optimizer
     criterion = torch.nn.MSELoss()
@@ -30,8 +33,9 @@ def make(config):
 def get_data(config=None):
     transformed_dataset = FaceLandmarksDataset(data_file=data_file, data_dir=data_dir, transform=Transforms())
     # creating toy dataset (sampled)
-    toy_dataset, other_dataset = torch.data.utils.random_split(transformed_dataset,
-                                              [len(transformed_dataset) // 6, 5 * len(transformed_dataset) // 6])
+    toy_dataset, other_dataset = torch.utils.data.random_split(transformed_dataset,
+                                                               [len(transformed_dataset) // 6,
+                                                                5 * len(transformed_dataset) // 6])
     # split the dataset into validation and test sets
     len_valid_set = int(config.train_val_split_ratio * len(toy_dataset))
     len_train_set = len(toy_dataset) - len_valid_set
@@ -48,9 +52,8 @@ def make_loader(dataset, batch_size):
 
 
 def train_model(model, dataloaders, criterion, optimizer, scheduler, config):
-
     best_model_wts = copy.deepcopy(model.state_dict())
-    min_loss =np.inf
+    min_loss = np.inf
 
     for epoch in range(config.epochs):
         print('Epoch {}/{}'.format(epoch, config.epochs - 1))
@@ -64,7 +67,7 @@ def train_model(model, dataloaders, criterion, optimizer, scheduler, config):
             if phase == 'train':
                 model.train()  # Set model to training mode
             else:
-                model.eval()   # Set model to evaluate mode
+                model.eval()  # Set model to evaluate mode
 
             running_loss = 0.0
 
@@ -145,7 +148,7 @@ def model_pipeline(hyperparameters):
     return model
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     # LogIn to wandb
     wandb.login()
     # Ensure deterministic behavior
@@ -166,5 +169,4 @@ if __name__ == "main":
         dataset=dataset,
         train_val_split_ratio=train_val_split_ratio,
         architecture=architecture)
-
     model = model_pipeline(params)
