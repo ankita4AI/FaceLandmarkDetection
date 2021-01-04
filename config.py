@@ -10,4 +10,4 @@ learning_rate = 0.0001
 dataset = "DLIB"
 architecture = "Resnet"
 model_checkpoint_path = 'checkpoints/'
-model_checkpoint = 'checkpoints/model-{epoch:02d}-{val_loss:.2f}'
+model_checkpoint = 'checkpoints_lit/model-{epoch:02d}-{val_loss:.2f}'
