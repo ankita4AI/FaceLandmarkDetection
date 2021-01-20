@@ -10,8 +10,6 @@ mse_loss = torch.nn.MSELoss()
 class FaceLandMarkLitModel(pl.LightningModule):
     def __init__(self):
         super().__init__()
-        # log hyperparameters
-        self.save_hyperparameters()
         self.learning_rate = config.learning_rate
         self.model = Network(config.num_classes)
 

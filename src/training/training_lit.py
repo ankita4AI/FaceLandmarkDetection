@@ -10,6 +10,7 @@ from FaceLandmarkDetection.src.training.lit_model import FaceLandMarkLitModel
 checkpoint_callback = ModelCheckpoint(
     monitor='val_loss',
     filepath=model_checkpoint,
+    dirpath=lit_model_checkpoint_path,
     save_top_k=3,
     mode='min')
 
@@ -31,5 +32,5 @@ with wandb.init(project=project, config=params):
                          logger=wandb_logger,
                          progress_bar_refresh_rate=20,
                          checkpoint_callback=checkpoint_callback)
-    model = FaceLandMarkLitModel(num_classes=wandb.config.num_classes)
+    model = FaceLandMarkLitModel()
     trainer.fit(model, dm)
