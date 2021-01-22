@@ -66,3 +66,6 @@ curl http://127.0.0.1:8080/predictions/resnet_faces -T "{~/FaceLandMarkDetection
 ```bash
 curl -X POST "localhost:8081/models?url=resnet_faces.mar&batch_size=8&max_batch_delay=50"
 ```
+
+#### Build TorchServe oneself for changes at the server side.
+- use case, increasing gRPC ServerBuilder default message size limit (default 4MB)
