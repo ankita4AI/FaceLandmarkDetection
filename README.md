@@ -14,6 +14,11 @@ TorchServe is a flexible and easy to use tool for serving PyTorch models.
 * **Plugins**: These are custom endpoints or authz/authn or batching algorithms that can be dropped into TorchServe at startup time.
 * **Model Store**: This is a directory in which all the loadable models exist.
 
+### Source
+```bash
+git clone https://github.com/pytorch/serve.git
+``` 
+
 1. Install dependencies: For different machines please follow TorchServe's official github repo
 python ./ts_scripts/install_dependencies.py
 2. Install TorchServe and Torch Model Archiver
