@@ -40,3 +40,5 @@ Where `org.pytorch:pytorch_android` is the main dependency with PyTorch Android 
 `org.pytorch:pytorch_android_torchvision` - additional library with utility functions for converting `android.media.Image` and `android.graphics.Bitmap` to tensors.
 
 #### 4. Find the images and models in assets
+
+## This repo only has custom files like MainActivity, Gradle build and Assets.
