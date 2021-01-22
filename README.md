@@ -31,7 +31,7 @@ torch-model-archiver --model-name resnet_faces \
 
 #### Start TorchServe
 ```bash
-torchserve --start --ncs --model-store model_store --models densenet161.mar
+torchserve --start --ncs --model-store model_store --models resnet_faces.mar
 ```
 
 #### Using GRPC APIs through python client
