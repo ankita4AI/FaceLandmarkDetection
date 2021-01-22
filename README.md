@@ -36,7 +36,6 @@ dependencies {
 }
 ```
 Where `org.pytorch:pytorch_android` is the main dependency with PyTorch Android API, including libtorch native library for all 4 android abis (armeabi-v7a, arm64-v8a, x86, x86_64).
-Further in this doc you can find how to rebuild it only for specific list of android abis. 
 
 `org.pytorch:pytorch_android_torchvision` - additional library with utility functions for converting `android.media.Image` and `android.graphics.Bitmap` to tensors.
 
