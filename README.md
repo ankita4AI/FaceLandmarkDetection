@@ -1,4 +1,4 @@
-# PyTorch Android Exampl
+# PyTorch Android Example
 
 This application runs TorchScript serialized modes on static image and random tensors needed for benchmarking.
 
