@@ -4,6 +4,7 @@ import os
 import numpy as np
 import random
 import time
+import torch.optim as optim
 from FaceLandmarkDetection.src.detection.model.resnet import resnet18
 from FaceLandmarkDetection.src.detection.data.dataset import FaceLandmarksDataset
 from FaceLandmarkDetection.src.detection.data.prepare_data import Transforms
@@ -152,3 +153,51 @@ def evaluate_model(model, test_loader, device, criterion=None):
         
     eval_loss = running_loss / len(test_loader.dataset)
     return eval_loss
+
+
+def print_size_of_model(model):
+    if isinstance(model, torch.jit.RecursiveScriptModule):
+        torch.jit.save(model, "temp.p")
+    else:
+        torch.jit.save(torch.jit.script(model), "temp.p")
+    print('Size (MB):', os.path.getsize("temp.p")/1e6)
+    os.remove('temp.p')
+
+
+def train_model(model, train_loader, test_loader, device, num_epochs):
+    learning_rate = 1e-2
+    criterion = nn.MSELoss()
+    model.to(device)
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+
+    for epoch in range(num_epochs):
+        # Training
+        model.train()
+
+        running_loss = 0
+        running_corrects = 0
+        # pruner.update_epoch(epoch)
+        for inputs, labels in train_loader:
+
+            inputs = inputs.to(device)
+            labels = labels.to(device)
+            labels = labels.view(labels.size(0), -1).float()
+            # zero the parameter gradients
+            optimizer.zero_grad()
+
+            # forward + backward + optimize
+            outputs = model(inputs)
+            loss = criterion(outputs, labels)
+            loss.backward()
+            optimizer.step()
+
+            # statistics
+            running_loss += loss.item() * inputs.size(0)
+
+        train_loss = running_loss / len(train_loader.dataset)
+
+        # Evaluation
+        model.eval()
+        eval_loss = evaluate_model(model=model, test_loader=test_loader, device=device, criterion=criterion)
+        print("Epoch: {:02d} Train Loss: {:.3f} Eval Loss: {:.3f}".format(epoch, train_loss, eval_loss))
+    return model
